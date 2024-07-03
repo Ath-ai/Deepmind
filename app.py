@@ -1,5 +1,6 @@
 import streamlit as st
-from transformers import pipeline
+from diffusers import DiffusionPipeline
+import torch
 from PIL import Image
 import io
 
@@ -10,7 +11,9 @@ st.title("Text-to-Image Generator")
 # Initialize the text-to-image pipeline
 @st.cache_resource
 def load_model():
-    return pipeline("text-to-image", model="runwayml/stable-diffusion-v1-5")
+    model_id = "CompVis/ldm-text2im-mr-clipl"
+    pipe = DiffusionPipeline.from_pretrained(model_id, torch_dtype=torch.float32)
+    return pipe
 
 generator = load_model()
 
@@ -21,11 +24,11 @@ prompt = st.text_input("Enter your image description:", "A beautiful sunset over
 if st.button("Generate Image"):
     with st.spinner("Generating image..."):
         # Generate the image
-        image = generator(prompt)
+        image = generator(prompt).images[0]
         
         # Convert the image to bytes
         img_byte_arr = io.BytesIO()
-        image[0].save(img_byte_arr, format='PNG')
+        image.save(img_byte_arr, format='PNG')
         img_byte_arr = img_byte_arr.getvalue()
         
         # Display the generated image

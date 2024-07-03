@@ -369,3 +369,236 @@ if prompt := st.chat_input("What's on your mind?"):
     
     # Add assistant response to chat history
     st.session_state.messages.append({"role": "assistant", "content": full_response})
+# ... (previous code remains the same)
+
+# Add a pulsating, interactive footer with hover effects
+st.markdown("""
+    <div class='footer'>
+        <div class='footer-content'>
+            <p>Created with <span class='heart'>❤️</span> using Streamlit and Gemini AI</p>
+            <p><a href="https://www.anthropic.com" class='anthropic-link'>Powered by Anthropic</a></p>
+        </div>
+        <div class='footer-glow'></div>
+    </div>
+""", unsafe_allow_html=True)
+
+# Add Prism.js for syntax highlighting
+st.markdown("""
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-tomorrow.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-python.min.js"></script>
+""", unsafe_allow_html=True)
+
+# Add custom JavaScript for interactive elements
+st.markdown("""
+    <script>
+    // Function to add ripple effect to buttons
+    function addRippleEffect(event) {
+        const button = event.currentTarget;
+        const ripple = document.createElement('span');
+        const rect = button.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height);
+        const x = event.clientX - rect.left - size / 2;
+        const y = event.clientY - rect.top - size / 2;
+        
+        ripple.style.width = ripple.style.height = `${size}px`;
+        ripple.style.left = `${x}px`;
+        ripple.style.top = `${y}px`;
+        ripple.classList.add('ripple');
+        
+        button.appendChild(ripple);
+        
+        ripple.addEventListener('animationend', () => {
+            ripple.remove();
+        });
+    }
+
+    // Add ripple effect to all buttons
+    document.querySelectorAll('.stButton > button').forEach(button => {
+        button.addEventListener('click', addRippleEffect);
+    });
+
+    // Animate the heart in the footer
+    const heart = document.querySelector('.heart');
+    setInterval(() => {
+        heart.classList.add('pulse');
+        setTimeout(() => {
+            heart.classList.remove('pulse');
+        }, 1000);
+    }, 2000);
+
+    // Add hover effect to Anthropic link
+    const anthropicLink = document.querySelector('.anthropic-link');
+    anthropicLink.addEventListener('mouseover', () => {
+        anthropicLink.style.textShadow = '0 0 10px #4fc3f7';
+    });
+    anthropicLink.addEventListener('mouseout', () => {
+        anthropicLink.style.textShadow = 'none';
+    });
+    </script>
+""", unsafe_allow_html=True)
+
+# Add custom CSS for new interactive elements
+st.markdown("""
+    <style>
+    /* ... (previous styles remain the same) ... */
+
+    /* Enhanced footer styles */
+    .footer {
+        text-align: center;
+        padding: 20px;
+        background-color: rgba(255, 255, 255, 0.05);
+        font-size: 16px;
+        color: #ffffff;
+        margin-top: 40px;
+        border-radius: 15px;
+        backdrop-filter: blur(10px);
+        transition: all 0.4s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .footer-content {
+        position: relative;
+        z-index: 1;
+    }
+
+    .footer-glow {
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(79, 195, 247, 0.2) 0%, transparent 70%);
+        transform: rotate(45deg);
+        animation: footerGlow 10s linear infinite;
+    }
+
+    @keyframes footerGlow {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    .footer:hover .footer-glow {
+        animation-duration: 5s;
+    }
+
+    .heart {
+        color: #ff4081;
+        display: inline-block;
+        transition: transform 0.3s ease;
+    }
+
+    .heart.pulse {
+        animation: heartbeat 1s ease-in-out;
+    }
+
+    @keyframes heartbeat {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.3); }
+        100% { transform: scale(1); }
+    }
+
+    .anthropic-link {
+        color: #4fc3f7;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+    .anthropic-link:hover {
+        color: #ff4081;
+    }
+
+    /* Ripple effect for buttons */
+    .stButton > button {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .ripple {
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.7);
+        transform: scale(0);
+        animation: ripple 0.6s linear;
+    }
+
+    @keyframes ripple {
+        to {
+            transform: scale(4);
+            opacity: 0;
+        }
+    }
+
+    /* Improved code block styling */
+    .code-block {
+        position: relative;
+        background: #1e1e1e;
+        color: #d4d4d4;
+        padding: 25px;
+        border-radius: 15px;
+        font-family: 'Courier New', monospace;
+        margin: 15px 0;
+        overflow: hidden;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        transition: all 0.3s ease;
+    }
+
+    .code-block:hover {
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+        transform: translateY(-5px);
+    }
+
+    .code-block::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #4fc3f7, #00b0ff, #0091ea);
+    }
+
+    .code-block pre {
+        white-space: pre-wrap;
+        word-wrap: break-word;
+    }
+
+    /* Enhanced avatar styling */
+    .chat-message .avatar::after {
+        content: '';
+        position: absolute;
+        top: -5px;
+        left: -5px;
+        right: -5px;
+        bottom: -5px;
+        background: linear-gradient(45deg, #4fc3f7, #00b0ff, #0091ea);
+        border-radius: 50%;
+        z-index: -1;
+        opacity: 0;
+        transition: all 0.3s ease;
+    }
+
+    .chat-message:hover .avatar::after {
+        opacity: 1;
+        top: -2px;
+        left: -2px;
+        right: -2px;
+        bottom: -2px;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
+# Add a loading animation
+def load_lottie_url(url: str):
+    r = requests.get(url)
+    if r.status_code != 200:
+        return None
+    return r.json()
+
+lottie_url = "https://assets5.lottiefiles.com/packages/lf20_bdsthrsn.json"
+lottie_json = load_lottie_url(lottie_url)
+st_lottie(lottie_json, speed=1, height=200, key="loading")
+
+# Main app logic (chat interface) remains the same
+# ...
